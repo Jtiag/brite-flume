@@ -157,9 +157,11 @@ public class LogParser {
 
     public static void main(String[] args) throws Exception {
         System.out.println(ISODateTimeFormat.dateTime().print(System.currentTimeMillis()));
-        String pattern = "%d{ISO8601} %p %c{2}: %m%n";
+//        String pattern = "%d{ISO8601} %p %c{2}: %m%n";
+        String pattern = "%d{ISO8601} t-(%t) l-[%p] c-(%c{2}) m-<%m>%n";
         LogParser p = new LogParser(pattern);
-        String line = "2015-11-16 14:14:37,458 INFO org.apache.hadoop.hdfs.server.datanode.fsdataset.impl.FsDatasetAsyncDiskService: Deleted BP-154267003-10.128.11.36-1441951366325 blk_1073748051_7230 file /home/hadoop/storage/dfs/data/current/BP-154267003-10.128.11.36-1441951366325/current/finalized/subdir0/subdir24/blk_1073748051";
+//        String line = "2015-11-16 14:14:37,458 INFO org.apache.hadoop.hdfs.server.datanode.fsdataset.impl.FsDatasetAsyncDiskService: Deleted BP-154267003-10.128.11.36-1441951366325 blk_1073748051_7230 file /home/hadoop/storage/dfs/data/current/BP-154267003-10.128.11.36-1441951366325/current/finalized/subdir0/subdir24/blk_1073748051";
+        String line = "2017-12-15 18:17:00,004 t-(task-scheduler-1) l-[DEBUG] c-(task.ScheduledTasks) m-<scheduled task beginning>";
         LogEntry log = p.parseLine(line);
         System.out.println(log.toString());
         String logFilePath = "d:/realtime.log";

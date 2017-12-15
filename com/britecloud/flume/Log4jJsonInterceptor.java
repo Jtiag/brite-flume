@@ -15,6 +15,9 @@ import org.apache.flume.interceptor.Interceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Administrator
+ */
 public class Log4jJsonInterceptor implements Interceptor {
     private static final Logger logger = LoggerFactory.getLogger(Log4jJsonInterceptor.class);
     static final String PATTERN = "pattern";
@@ -34,10 +37,12 @@ public class Log4jJsonInterceptor implements Interceptor {
         this.charset = charset;
     }
 
+    @Override
     public void close() {
         logger.debug("close...");
     }
 
+    @Override
     public void initialize() {
         logger.debug("initialize....");
         if (this.ip == null) {
@@ -57,6 +62,7 @@ public class Log4jJsonInterceptor implements Interceptor {
         logger.debug("initialized");
     }
 
+    @Override
     public Event intercept(Event event) {
         String body;
         try {
@@ -69,6 +75,9 @@ public class Log4jJsonInterceptor implements Interceptor {
             LogEntry entry = this.logParser.parseLine(body);
             entry.put("serviceName", this.name);
             entry.put("IP", this.ip);
+            /**
+             * 转化为json串
+             */
             String result = entry.toString();
             event.setBody(result.getBytes());
         }
@@ -76,6 +85,7 @@ public class Log4jJsonInterceptor implements Interceptor {
         return event;
     }
 
+    @Override
     public List<Event> intercept(List<Event> eventList) {
         Iterator var2 = eventList.iterator();
 
@@ -97,6 +107,7 @@ public class Log4jJsonInterceptor implements Interceptor {
         public Builder() {
         }
 
+        @Override
         public void configure(Context context) {
             String patternString = context.getString("pattern");
             Preconditions.checkArgument(!StringUtils.isEmpty(patternString), "Must supply a valid pattern string");
@@ -110,6 +121,7 @@ public class Log4jJsonInterceptor implements Interceptor {
             this.logParser.setMsgMaxLength(maxLength.intValue());
         }
 
+        @Override
         public Interceptor build() {
             Preconditions.checkArgument(this.logParser != null, "ConversionPattern was misconfigured");
             return new Log4jJsonInterceptor(this.logParser, this.name, this.ip, this.charset);

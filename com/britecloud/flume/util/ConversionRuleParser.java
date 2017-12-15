@@ -9,9 +9,14 @@ import java.util.regex.Pattern;
 
 /**
  * @author Administrator
+ * 匹配规则解析
  */
 public class ConversionRuleParser {
-    private static final Pattern EXTRACTION_PATTERN = Pattern.compile("%(-?(\\d+))?(\\.(\\d+))?([a-zA-Z])(\\{([^\\}]+)\\})?");
+//    private static final Pattern EXTRACTION_PATTERN = Pattern.compile("%(-?(\\d+))?(\\.(\\d+))?([a-zA-Z])(\\{([^\\}]+)\\})?");
+    /**
+     * 2017-12-15 18:17:00,004 t-(task-scheduler-1) l-[DEBUG] c-(task.ScheduledTasks) m-<scheduled task beginning>
+     */
+    private static final Pattern EXTRACTION_PATTERN = Pattern.compile("%(-?(\\d+))?(\\.(\\d+))?(^t-\\(*([^)]+)\\))?(^l-\\[*([^]]+)])?(^c-\\(*([^)]+)\\))?(^m-<*([^>]+)>)?");
     public static final String PROP_DATEFORMAT = "dateFormat";
 
     public ConversionRuleParser() {
@@ -23,6 +28,9 @@ public class ConversionRuleParser {
     }
 
     protected List<ConversionRule> extractRules(String externalPattern) throws Exception {
+        /**
+         * 返回不包含 %n 的匹配字符串 log4j中换行
+         */
         externalPattern = this.prepare(externalPattern);
         Matcher m = EXTRACTION_PATTERN.matcher(externalPattern);
         ArrayList ret = new ArrayList();

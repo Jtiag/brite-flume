@@ -3,6 +3,10 @@ package flume.util;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Administrator
+ * 转化规则的 名称及其匹配深度等信息
+ */
 public final class ConversionRule {
     private boolean followedByQuotedString;
     private int beginIndex;
